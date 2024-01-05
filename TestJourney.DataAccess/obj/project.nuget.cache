@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "x8uoL+zwQC0/KCCnkln62ruMAjxcJg7VoYzUuVyo1UTQVgVbTSSOGNZHyUB60ziuZD3xbBhrF9tm6o3IShSasA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Asus\\Desktop\\ProyectosDotnet\\TestJourney.Api\\TestJourney.DataAccess\\TestJourney.DataAccess.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Asus\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

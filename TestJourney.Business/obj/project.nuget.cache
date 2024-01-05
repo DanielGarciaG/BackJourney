@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "MDUXnJ0kexlWteqrJEdAWsE+oBY9ZzsGOKvTQDkqPa4EINi8EwYUBS4k2IfPG+NMKnS2y4xw0vDipd0JxtBRaw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Asus\\Desktop\\ProyectosDotnet\\TestJourney.Api\\TestJourney.Business\\TestJourney.Business.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Asus\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}

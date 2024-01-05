@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "xLYpBdxvnzWC1UbzMjz/tya8OZiSJx654VstZQ/G2Aw=",
+  "Source": "TestJourney.Api",
+  "BasePath": "_content/TestJourney.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
