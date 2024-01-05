@@ -4,6 +4,6 @@ namespace TestJourney.Business.Interfaces
 {
     public interface IJourneyService
     {
-        public Task<JourneyDto> GetAssociatedFlights(RequestJourneyDto requestJourneyDto);
+        public Task<JourneyDto> GetCalculatedRoute(RequestJourneyDto requestJourneyDto);
     }
 }
