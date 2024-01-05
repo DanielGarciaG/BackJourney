@@ -22,7 +22,7 @@ namespace TestJourney.Business.Services
             List<FlightNewshoreAir> FlightsNewshoreAir = await _newshoreAir.FindAssociatedFlights(requestJourney);
 
             //Algoritmo para calcular rutas
-            
+            List<FlightNewshoreAir> flightsCalculated = CalculateRoute(FlightsNewshoreAir, requestJourneyDto.Origin, requestJourneyDto.Destination, 5);
 
             //Este mapeo debe analizarse bien
             JourneyDto journey = _mapper.Map<JourneyDto>(FlightsNewshoreAir);
@@ -33,7 +33,8 @@ namespace TestJourney.Business.Services
         private List<FlightNewshoreAir>? CalculateRoute(List<FlightNewshoreAir> FlightsNewshoreAir, string origin, string destination, int numJourneys)
         {
             numJourneys -= 1;
-            if (numJourneys == 0) return null;
+            if (numJourneys == 0) 
+                return null;
 
             List<FlightNewshoreAir> returnListFlights = new();
             List<FlightNewshoreAir> FlightsByDestination = FlightsNewshoreAir.Where(x => x.ArrivalStation.Equals(destination)).ToList();
