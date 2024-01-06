@@ -9,7 +9,12 @@ namespace TestJourney.Business.Mappers
         public JourneyMappingProfile() 
         {
             CreateMap<RequestJourneyDto, RequestJourney>();
-            CreateMap<FlightNewshoreAir, JourneyDto>();
+            CreateMap<FlightNewshoreAir, FlightDto>()
+                .ForMember(x => x.Origin, m => m.MapFrom(y => y.DepartureStation))
+                .ForMember(x => x.Destination, m => m.MapFrom(y => y.ArrivalStation))
+                .ForPath(x => x.Transport.FlightCarrier, m => m.MapFrom(y => y.FlightCarrier))
+                .ForPath(x => x.Transport.FlightNumber, m => m.MapFrom(y => y.FlightNumber))
+                .ForMember(x => x.Price, m => m.MapFrom(y => y.Price));
         }
     }
 }

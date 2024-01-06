@@ -1,4 +1,6 @@
+using Serilog;
 using TestJourney.Business;
+using TestJourney.Business.Class;
 using TestJourney.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddBusinessService();
 builder.Services.AddDataAccessServices();
 
+var localConfigurations = builder.Configuration.Get<ContextConfiguration>();
+builder.Services.AddSingleton(localConfigurations.ApplicationContext);
 
 var app = builder.Build();
 

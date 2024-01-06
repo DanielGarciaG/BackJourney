@@ -2,6 +2,7 @@
 using TestJourney.Business.Class;
 using TestJourney.Business.DTO;
 using TestJourney.Business.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace TestJourney.Business.Services
 {
@@ -9,29 +10,53 @@ namespace TestJourney.Business.Services
     {
         public readonly INewshoreAir _newshoreAir;
         private readonly IMapper _mapper;
+        private readonly ApplicationContext _context;
+        private readonly ILogger<JourneyService> _logger;
 
-        public JourneyService(INewshoreAir newshoreAir, IMapper mapper) 
+        public JourneyService(INewshoreAir newshoreAir, IMapper mapper, ApplicationContext context, ILogger<JourneyService> logger) 
         {
             _newshoreAir = newshoreAir;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _context = context;
+            _logger = logger;
         }
 
-        public async Task<JourneyDto> GetCalculatedRoute(RequestJourneyDto requestJourneyDto)
+        public async Task<ResponseJourneyDto> GetCalculatedRoute(RequestJourneyDto requestJourneyDto)
         {
-            RequestJourney requestJourney = _mapper.Map<RequestJourney>(requestJourneyDto);
-            List<FlightNewshoreAir> FlightsNewshoreAir = await _newshoreAir.FindAssociatedFlights(requestJourney);
+            try
+            {
+                _logger.LogInformation("Enter GetCalculatedRoute");
+                _logger.LogInformation($"Origin: {requestJourneyDto.Origin} Destination: {requestJourneyDto.Destination}");
+                RequestJourney requestJourney = _mapper.Map<RequestJourney>(requestJourneyDto);
+                List<FlightNewshoreAir> FlightsNewshoreAir = await _newshoreAir.FindAssociatedFlights(requestJourney);
 
-            //Algoritmo para calcular rutas
-            List<FlightNewshoreAir> flightsCalculated = CalculateRoute(FlightsNewshoreAir, requestJourneyDto.Origin, requestJourneyDto.Destination, 5);
+                List<FlightNewshoreAir> flightsCalculated = CalculateRoute(FlightsNewshoreAir, requestJourneyDto.Origin, requestJourneyDto.Destination, _context.MaximumNumberFlights);
 
-            //Este mapeo debe analizarse bien
-            JourneyDto journey = _mapper.Map<JourneyDto>(FlightsNewshoreAir);
+                if (flightsCalculated.Count == 0)
+                    return null;
 
-            return journey;
+                List<FlightDto> flightDto = _mapper.Map<List<FlightDto>>(flightsCalculated);
+
+                ResponseJourneyDto journeyDto = new();
+                journeyDto.Journey = new();
+                journeyDto.Journey.Origin = requestJourneyDto.Origin;
+                journeyDto.Journey.Destination = requestJourneyDto.Destination;
+                journeyDto.Journey.Flight = flightDto;
+                journeyDto.Journey.CalculateTotalPrice();
+
+                return journeyDto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error mientras calcula la ruta: " + ex.GetBaseException());
+                throw;
+            }
+            
         }
 
         private List<FlightNewshoreAir>? CalculateRoute(List<FlightNewshoreAir> FlightsNewshoreAir, string origin, string destination, int numJourneys)
         {
+            _logger.LogInformation($"Enter CalculateRoute num journey: {numJourneys}");
             numJourneys -= 1;
             if (numJourneys == 0) 
                 return null;

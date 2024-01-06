@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TestJourney.Business.Class;
 using TestJourney.Business.DTO;
 using TestJourney.Business.Interfaces;
 
@@ -19,8 +18,20 @@ namespace TestJourney.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RequestJourneyDto requestJourneyDto)
         {
-            JourneyDto journey = await _journeyService.GetCalculatedRoute(requestJourneyDto);
-            return Ok(journey);
+            try
+            {
+                ResponseJourneyDto journey = await _journeyService.GetCalculatedRoute(requestJourneyDto);
+
+                if (journey == null)
+                    return BadRequest("Su solicitud no pudo ser procesada");
+
+                return Ok(journey);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+            
         }
     }
 }
