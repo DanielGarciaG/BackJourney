@@ -37,7 +37,7 @@ namespace TestJourney.DataAccess.Integrations
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "Ha ocurrido un error mientras consulto la api de NEWSHORE AIR: " + ex.GetBaseException());
+                _logger.LogError(ex, $"An error occurred while querying the NEWSHORE AIR API: {ex.GetBaseException()}");
                 throw;
             }
         }

@@ -48,7 +48,7 @@ namespace TestJourney.Business.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ha ocurrido un error mientras calcula la ruta: " + ex.GetBaseException());
+                _logger.LogError(ex, $"An error has occurred in the route calculation process: {ex.GetBaseException()}");
                 throw;
             }
             
@@ -56,32 +56,41 @@ namespace TestJourney.Business.Services
 
         private List<FlightNewshoreAir>? CalculateRoute(List<FlightNewshoreAir> FlightsNewshoreAir, string origin, string destination, int numJourneys)
         {
-            _logger.LogInformation($"Enter CalculateRoute num journey: {numJourneys}");
-            numJourneys -= 1;
-            if (numJourneys == 0) 
-                return null;
-
-            List<FlightNewshoreAir> returnListFlights = new();
-            List<FlightNewshoreAir> FlightsByDestination = FlightsNewshoreAir.Where(x => x.ArrivalStation.Equals(destination)).ToList();
-
-            FlightNewshoreAir flight = FlightsByDestination.FirstOrDefault(x => x.DepartureStation.Equals(origin));
-            if (flight != null)
+            try
             {
-                returnListFlights.Add(flight);
+                _logger.LogInformation($"Enter CalculateRoute num journey: {numJourneys}");
+                numJourneys -= 1;
+                if (numJourneys == 0)
+                    return null;
+
+                List<FlightNewshoreAir> returnListFlights = new();
+                List<FlightNewshoreAir> FlightsByDestination = FlightsNewshoreAir.Where(x => x.ArrivalStation.Equals(destination)).ToList();
+
+                FlightNewshoreAir flight = FlightsByDestination.FirstOrDefault(x => x.DepartureStation.Equals(origin));
+                if (flight != null)
+                {
+                    returnListFlights.Add(flight);
+                    return returnListFlights;
+                }
+
+                foreach (FlightNewshoreAir flightNewshoreAir in FlightsByDestination)
+                {
+                    returnListFlights = CalculateRoute(FlightsNewshoreAir, origin, flightNewshoreAir.DepartureStation, numJourneys);
+                    if (flightNewshoreAir != null)
+                        returnListFlights.Add(flightNewshoreAir);
+
+                    if (returnListFlights.Count > 0)
+                        break;
+                }
+
                 return returnListFlights;
-            }               
-
-            foreach (FlightNewshoreAir flightNewshoreAir in FlightsByDestination)
-            {
-                returnListFlights = CalculateRoute(FlightsNewshoreAir, origin, flightNewshoreAir.DepartureStation, numJourneys);
-                if (flightNewshoreAir != null) 
-                    returnListFlights.Add(flightNewshoreAir);
-
-                if (returnListFlights.Count > 0) 
-                    break;
             }
-
-            return returnListFlights;
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while calculating routes { ex.GetBaseException()}");
+                throw;
+            }
+            
         }
     }
 }

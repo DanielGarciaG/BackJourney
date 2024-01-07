@@ -14,6 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddBusinessService();
 builder.Services.AddDataAccessServices();
 
+builder.Services.AddCors(options => options.AddPolicy("AllowWebApp",
+                            builder => builder.AllowAnyOrigin()
+                                              .AllowAnyHeader()
+                                              .AllowAnyMethod()));
+
 var localConfigurations = builder.Configuration.Get<ContextConfiguration>();
 builder.Services.AddSingleton(localConfigurations.ApplicationContext);
 
@@ -25,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowWebApp");
 
 app.UseHttpsRedirection();
 

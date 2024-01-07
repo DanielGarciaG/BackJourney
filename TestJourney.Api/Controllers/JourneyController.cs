@@ -15,15 +15,21 @@ namespace TestJourney.Api.Controllers
             _journeyService = journeyService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RequestJourneyDto requestJourneyDto)
+        [HttpGet("{origin}/{destination}")]
+        public async Task<IActionResult> Post(string origin, string destination)
         {
             try
             {
+                RequestJourneyDto requestJourneyDto = new RequestJourneyDto
+                {
+                    Origin = origin,
+                    Destination = destination
+                };
+
                 ResponseJourneyDto journey = await _journeyService.GetCalculatedRoute(requestJourneyDto);
 
                 if (journey == null)
-                    return BadRequest("Su solicitud no pudo ser procesada");
+                    return BadRequest( new { message = "Su solicitud no pudo ser procesada" });
 
                 return Ok(journey);
             }
