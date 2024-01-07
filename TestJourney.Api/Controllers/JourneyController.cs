@@ -16,7 +16,7 @@ namespace TestJourney.Api.Controllers
         }
 
         [HttpGet("{origin}/{destination}")]
-        public async Task<IActionResult> Post(string origin, string destination)
+        public async Task<IActionResult> Get(string origin, string destination)
         {
             try
             {
